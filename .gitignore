@@ -1,6 +1,7 @@
 *.atsp
 *.class
-*.settings
+.settings/
 *.classpath
 *.project
-bin/*.class
+bin/
+*/**/.class
