@@ -3,9 +3,15 @@ package Helpers;
 import java.util.ArrayList;
 
 public class TSPInstance {
+	
+	public TSPInstance() {
+	}
+
 	ArrayList<Integer> cities = new ArrayList<Integer>();
 	String name;
 	Integer dimension;
+	
+	
 	
 	TSPInstance(String name, ArrayList<Integer> cities, Integer dimension) {
 		this.cities = cities;
@@ -35,5 +41,10 @@ public class TSPInstance {
 
 	public void setDimension(Integer dimension) {
 		this.dimension = dimension;
+	}
+	
+	@Override
+	public String toString() {
+		return this.getName() + (this.getDimension());
 	}
 }
