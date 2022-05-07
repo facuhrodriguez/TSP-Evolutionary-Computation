@@ -58,7 +58,7 @@ public class TSPInstance {
 				HashMap<Integer, Integer> paths = c.getValue();
 				Set<Entry<Integer, Integer>> pathCities = paths.entrySet();
 				for (Entry<Integer, Integer> p : pathCities) {
-					System.out.println("City " + p.getKey() + " cost: " + p.getValue());
+					System.out.println("To city " + p.getKey() + " the cost is: " + p.getValue());
 				}
 				
 			}
