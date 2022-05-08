@@ -2,6 +2,7 @@ package Application;
 
 import Helpers.TSPInstance;
 import Helpers.TSPLIBHelper;
+import TSPSolution.LocalSearch;
 
 public class App {
 	static TSPLIBHelper  fh;
@@ -11,8 +12,9 @@ public class App {
 			fh = new TSPLIBHelper();
 			fh.readTSPInstanceFile(fileUrl);
 			TSPInstance tspData = fh.getTSPInstance();
-			tspData.printCities();
-			tspData.printPaths();
+//			LocalSearch l = new LocalSearch(tspData);
+//			tspData.printCities();
+//			tspData.printPaths();
 		} catch (Exception e) {
 			System.out.println("An error occurred.");
 			e.printStackTrace();

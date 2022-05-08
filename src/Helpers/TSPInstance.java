@@ -18,7 +18,7 @@ public class TSPInstance {
 	
 	
 	public void setCities(ArrayList<Integer> cities) {
-			this.cities = cities;
+		this.cities = cities;
 	}
 	
 	public void setPaths(HashMap<Integer, HashMap<Integer, Integer>> paths) {
@@ -31,6 +31,10 @@ public class TSPInstance {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public ArrayList<Integer> getCities() {
+		return this.cities;
 	}
 
 	public Integer getDimension() {
@@ -79,6 +83,45 @@ public class TSPInstance {
 				System.out.print(this.cities.get(i) + "-");
 			else 
 				System.out.println(this.cities.get(i));
+		}
+	}
+	
+	/**
+	 * Get the cost from the path @param from to @param to
+	 * @param from
+	 * @param to
+	 */
+	public int getCost(Integer from, Integer to) {
+		try {
+			if (!this.paths.containsKey(from)) return -1;
+			HashMap<Integer, Integer> path = this.paths.get(from);
+			if (!this.paths.containsKey(to)) return -1;
+			return path.get(to);
+		} catch (Exception e) {
+			System.out.println("Error getting cost " + e);
+			throw e;
+		}
+	}
+	
+	/**
+	 * Calculate fitness solution for the @param solution found
+	 * @param solution
+	 * @return the value of fitness
+	 */
+	public int fitnessFunction(ArrayList<Integer> solution) {
+		try {
+			Integer counter = 0;
+			for (int i = 0; i < solution.size() - 1; i++) {
+				Integer from = solution.get(i);
+				Integer to = solution.get(i + 1);
+				counter += this.getCost(from, to);
+			}
+			if (counter != 0)
+				return 1 / counter;
+			return 0;
+		} catch (Exception e) {
+			System.out.println("Error calculating fitness function " + e);
+			throw e;
 		}
 	}
 }
