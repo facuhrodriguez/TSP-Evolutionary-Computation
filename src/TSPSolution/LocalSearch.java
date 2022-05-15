@@ -23,24 +23,29 @@ public class LocalSearch {
 	 * 
 	 * @param solution
 	 */
-	public void run(ArrayList<Integer> solution) {
+	public ArrayList<Integer> runLocalSearchAlgorithm(ArrayList<Integer> solution) {
 		try {
 			ArrayList<Integer> bestSolution = solution;
-			int fitnessBest = this.tspInstance.fitnessFunction(bestSolution);
+			ArrayList<ArrayList<Integer>> neighbors = new ArrayList<ArrayList<Integer>>();
+			double fitnessBest = this.tspInstance.fitnessFunction(bestSolution);
 			int iterations = 0;
 			while (iterations <= LocalSearch.DEPTH_CONDITION) {
 				int counter = 0;
 				while (counter <= maxDepthNeighborhood()) {
 					ArrayList<Integer> newSolution = this.generateNeighbor(solution);
-					int newFitness = this.tspInstance.fitnessFunction(newSolution);
-					if (newFitness > fitnessBest) {
-						fitnessBest = newFitness;
-						bestSolution = newSolution;
+					if (!neighborExists(newSolution, neighbors)) {
+						double newFitness = this.tspInstance.fitnessFunction(newSolution);
+						if (newFitness > fitnessBest) {
+							fitnessBest = newFitness;
+							bestSolution = newSolution;
+						}
+						neighbors.add(bestSolution);
+						counter++;
 					}
-					counter++;
 				}
 				iterations++;
 			}
+			return bestSolution;
 		} catch (Exception e) {
 			System.out.println("Error run local search algorithm " + e);
 			throw e;
@@ -95,7 +100,11 @@ public class LocalSearch {
 					swapCities(solution, newSolution);
 					currentFinalIndex++;
 				} else {
-					currentInitialIndex++;
+					if (currentFinalIndex + 1 > solution.size()) {
+						currentInitialIndex = 0;
+					} else {
+						currentInitialIndex++;
+					}
 					currentFinalIndex = currentInitialIndex + 1;
 					swapCities(solution, newSolution);
 				}
@@ -158,14 +167,14 @@ public class LocalSearch {
 	}
 
 	/**
-	 * Determine the pivot rule for neighborhood (If there are many neighbors, only
-	 * explore the 60% of them)
+	 * Determine the pivot rule for neighborhood (If there are many neighbors (> 50), only
+	 * explore 60% of them)
 	 * 
 	 * @return Max depth of neighborhood explore
 	 */
 	private int maxDepthNeighborhood() {
 		Integer dimension = this.tspInstance.getCities().size();
-		int maxDepth = (dimension * 2) - 1;
+		int maxDepth = ((dimension - 1) * 2) + 1;
 		if (maxDepth > LocalSearch.LIMIT_NEIGHBORS) {
 			int newMaxDepth = (int) (maxDepth - Math.ceil((maxDepth * LocalSearch.LIMIT_NEIGHBORHOOD_PERCENT)));
 			return newMaxDepth;

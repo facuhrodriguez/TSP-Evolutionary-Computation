@@ -108,16 +108,16 @@ public class TSPInstance {
 	 * @param solution
 	 * @return the value of fitness
 	 */
-	public int fitnessFunction(ArrayList<Integer> solution) {
+	public double fitnessFunction(ArrayList<Integer> solution) {
 		try {
-			Integer counter = 0;
+			double counter = 0;
 			for (int i = 0; i < solution.size() - 1; i++) {
 				Integer from = solution.get(i);
 				Integer to = solution.get(i + 1);
 				counter += this.getCost(from, to);
 			}
 			if (counter != 0)
-				return 1 / counter;
+				return (1 / counter);
 			return 0;
 		} catch (Exception e) {
 			System.out.println("Error calculating fitness function " + e);
