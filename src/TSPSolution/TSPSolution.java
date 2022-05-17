@@ -32,6 +32,9 @@ public class TSPSolution {
 			// Select parents to cross
 			this.generateParents();
 			
+			// Recombine and generate new breed
+			this.generateRecombination();
+			
 		} catch (Exception e) {
 			throw e;
 		}
@@ -51,11 +54,24 @@ public class TSPSolution {
 			int secondParentIndex = parentSelection.generateParent();
 			this.secondParent = this.initialPopulation.get(secondParentIndex);
 			this.initialPopulation.remove(secondParentIndex);
+			System.out.println("Parent 1: " + this.firstParent);
+			System.out.println("Parent 2: " + this.secondParent);
 		} catch (Exception e) {
 			System.out.println("Error generating parents " + e.getMessage());
 			throw e;
 		}
 		
+	}
+	
+	private void generateRecombination() {
+		try {
+			System.out.println("Recombinating parents...");
+			Recombination r = new ArcCross();
+			ArrayList<Integer> newBreed = r.recombinate(firstParent, secondParent);
+			System.out.println("Finished recombination. New breed: " + newBreed);
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 
 	/**
