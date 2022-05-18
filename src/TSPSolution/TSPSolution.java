@@ -5,6 +5,11 @@ import java.util.Collections;
 
 import Helpers.ComparatorIndividuals;
 import Helpers.TSPInstance;
+import localSearch.LocalSearch;
+import parentsSelection.ParentsSelection;
+import parentsSelection.RouletteWheelSelection;
+import recombination.ArcCross;
+import recombination.Recombination;
 
 public class TSPSolution {
 	private TSPInstance tspInstance;
@@ -32,6 +37,9 @@ public class TSPSolution {
 			// Select parents to cross
 			this.generateParents();
 			
+			// Recombine and generate new breed
+			this.generateRecombination();
+			
 		} catch (Exception e) {
 			throw e;
 		}
@@ -51,11 +59,24 @@ public class TSPSolution {
 			int secondParentIndex = parentSelection.generateParent();
 			this.secondParent = this.initialPopulation.get(secondParentIndex);
 			this.initialPopulation.remove(secondParentIndex);
+			System.out.println("Parent 1: " + this.firstParent);
+			System.out.println("Parent 2: " + this.secondParent);
 		} catch (Exception e) {
 			System.out.println("Error generating parents " + e.getMessage());
 			throw e;
 		}
 		
+	}
+	
+	private void generateRecombination() {
+		try {
+			System.out.println("Recombinating parents...");
+			Recombination r = new ArcCross();
+			ArrayList<Integer> newBreed = r.recombinate(firstParent, secondParent);
+			System.out.println("Finished recombination. New breed: " + newBreed);
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 
 	/**
@@ -121,6 +142,7 @@ public class TSPSolution {
 	/**
 	 * Print all initial population
 	 */
+	@SuppressWarnings("unused")
 	private void printInitialPopulation() {
 		for (int i = 0; i < initialPopulation.size(); i++) {
 			System.out.println("Gene - " + i);
