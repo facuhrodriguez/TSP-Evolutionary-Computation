@@ -1,4 +1,4 @@
-package TSPSolution;
+package localSearch;
 
 import java.util.ArrayList;
 

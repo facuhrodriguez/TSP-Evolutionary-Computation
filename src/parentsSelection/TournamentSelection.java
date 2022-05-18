@@ -1,4 +1,4 @@
-package TSPSolution;
+package parentsSelection;
 
 import java.util.ArrayList;
 import java.util.Random;

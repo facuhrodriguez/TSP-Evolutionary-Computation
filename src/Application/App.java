@@ -2,8 +2,8 @@ package Application;
 
 import Helpers.TSPInstance;
 import Helpers.TSPLIBHelper;
-import TSPSolution.LocalSearch;
 import TSPSolution.TSPSolution;
+import localSearch.LocalSearch;
 
 public class App {
 	static TSPLIBHelper  fh;

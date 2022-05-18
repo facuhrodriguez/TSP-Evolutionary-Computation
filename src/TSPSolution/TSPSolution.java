@@ -5,6 +5,11 @@ import java.util.Collections;
 
 import Helpers.ComparatorIndividuals;
 import Helpers.TSPInstance;
+import localSearch.LocalSearch;
+import parentsSelection.ParentsSelection;
+import parentsSelection.RouletteWheelSelection;
+import recombination.ArcCross;
+import recombination.Recombination;
 
 public class TSPSolution {
 	private TSPInstance tspInstance;
@@ -137,6 +142,7 @@ public class TSPSolution {
 	/**
 	 * Print all initial population
 	 */
+	@SuppressWarnings("unused")
 	private void printInitialPopulation() {
 		for (int i = 0; i < initialPopulation.size(); i++) {
 			System.out.println("Gene - " + i);

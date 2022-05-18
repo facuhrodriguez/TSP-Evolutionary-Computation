@@ -1,4 +1,4 @@
-package TSPSolution;
+package recombination;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,7 +88,7 @@ public class ArcCross extends Recombination {
 					int index = adj.lastIndexOf(aux);
 					if (index != i && !this.newBreed.contains(aux))
 						return aux;
-					int lengthAdj = getLongthAdjacency(aux);
+					int lengthAdj = getLengthAdjacency(aux);
 					if ((lengthAdj < minLength) && !this.newBreed.contains(aux)) {
 						minLength = lengthAdj;
 						indexMinLength = i;
@@ -101,14 +101,14 @@ public class ArcCross extends Recombination {
 		}
 	}
 
-	private int getLongthAdjacency(int city) {
+	private int getLengthAdjacency(int city) {
 		if (adjacencies.containsKey(city)) {
 			ArrayList<Integer> adj = this.adjacencies.get(city);
 			int counter = 0;
 			for (int i = 0; i < adj.size(); i++) {
 				int a = adj.get(i);
 				int indexA = adj.lastIndexOf(a);
-				if (indexA == i)
+				if (indexA == i && !this.newBreed.contains(a))
 					counter++;
 			}
 
