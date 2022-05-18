@@ -6,6 +6,8 @@ import java.util.Collections;
 import Helpers.ComparatorIndividuals;
 import Helpers.TSPInstance;
 import localSearch.LocalSearch;
+import mutation.GeneticMutation;
+import mutation.InversionMutation;
 import parentsSelection.ParentsSelection;
 import parentsSelection.RouletteWheelSelection;
 import recombination.ArcCross;
@@ -40,11 +42,26 @@ public class TSPSolution {
 			// Recombine and generate new breed
 			this.generateRecombination();
 			
+			// Mutate gene
+			this.mutateGene();
+			
 		} catch (Exception e) {
 			throw e;
 		}
 	}
 
+	private void mutateGene() {
+		try {
+			System.out.println("Mutating gene " + firstParent);
+			GeneticMutation mutation = new InversionMutation();
+			ArrayList<Integer> newGene = mutation.mutate(firstParent);
+			System.out.println("New mutated gene " + newGene);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	
 	private void generateParents() {
 		try {
 			System.out.println("Selecting parents to recombine...");
