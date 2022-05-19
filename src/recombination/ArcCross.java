@@ -76,26 +76,31 @@ public class ArcCross extends Recombination {
 	private int selectNextArc(int previousArc) {
 		try {
 			ArrayList<Integer> adj = this.adjacencies.get(previousArc);
-			if (adj.size() == 1)
-				return adj.get(0);
-			int minLength = Integer.MAX_VALUE;
-			int indexMinLength = 0;
-			for (int i = 0; i < adj.size(); i++) {
-				int aux = adj.get(i);
-				if (!this.newBreed.contains(aux)) {
-					// If there are duplicated arcs return that value, else get the shortest length
-					// of adjacencies
-					int index = adj.lastIndexOf(aux);
-					if (index != i && !this.newBreed.contains(aux))
-						return aux;
-					int lengthAdj = getLengthAdjacency(aux);
-					if ((lengthAdj < minLength) && !this.newBreed.contains(aux)) {
-						minLength = lengthAdj;
-						indexMinLength = i;
+			if (adj != null) {
+				if (adj.size() == 1)
+					return adj.get(0);
+				int minLength = Integer.MAX_VALUE;
+				int indexMinLength = 0;
+				for (int i = 0; i < adj.size(); i++) {
+					int aux = adj.get(i);
+					if (!this.newBreed.contains(aux)) {
+						// If there are duplicated arcs return that value, else get the shortest length
+						// of adjacencies
+						int index = adj.lastIndexOf(aux);
+						if (index != i && !this.newBreed.contains(aux))
+							return aux;
+						int lengthAdj = getLengthAdjacency(aux);
+						if ((lengthAdj < minLength) && !this.newBreed.contains(aux)) {
+							minLength = lengthAdj;
+							indexMinLength = i;
+						}
 					}
 				}
+				return adj.get(indexMinLength);
+			} else {
+				System.out.println("SAF");
 			}
-			return adj.get(indexMinLength);
+			return -1;
 		} catch (Exception e) {
 			throw e;
 		}
