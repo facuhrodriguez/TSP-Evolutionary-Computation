@@ -7,7 +7,12 @@ import parentsSelection.ParentsSelection;
 public abstract class SurvivorSelection {
 	private int totalPopulation;
 	protected ParentsSelection selectionMechanism;
-	ArrayList<ArrayList<Integer>> population;
+	protected String name;
+	protected ArrayList<ArrayList<Integer>> population;
+	
+	SurvivorSelection(String name) {
+		this.name = name;
+	}
 	
 	public abstract ArrayList<ArrayList<Integer>> generateSurvivors(ArrayList<ArrayList<Integer>> currentPopulation);
 	
@@ -22,5 +27,9 @@ public abstract class SurvivorSelection {
 	protected void setTotalPopulation(int p) {
 		this.totalPopulation = p;
 	}
-	
+
+	public String getName() {
+		return name;
+	}
+
 }

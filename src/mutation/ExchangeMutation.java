@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 public class ExchangeMutation extends GeneticMutation {
 
+	ExchangeMutation() {
+		super("Mutación por intercambio");
+		// TODO Auto-generated constructor stub
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public ArrayList<Integer> mutate(ArrayList<Integer> gene) {

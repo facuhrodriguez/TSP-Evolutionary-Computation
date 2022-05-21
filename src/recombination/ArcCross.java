@@ -9,13 +9,15 @@ public class ArcCross extends Recombination {
 	private ArrayList<Integer> newBreed = new ArrayList<Integer>();
 
 	public ArcCross() {
-
+		super("Cruce basado en arcos");
 	}
 
 	@Override
 	public ArrayList<Integer> recombinate(ArrayList<Integer> parent1, ArrayList<Integer> parent2) {
 		try {
+			this.newBreed = new ArrayList<Integer>();
 			this.createAdjacencies(parent1, parent2);
+			
 			double randomValue = Math.random();
 			int firstArc;
 			if (randomValue > 0.5)
@@ -26,12 +28,16 @@ public class ArcCross extends Recombination {
 			boolean lastElement = false;
 			int previousArc = firstArc;
 			while (!lastElement) {
-				int newCity = this.selectNextArc(previousArc);
+				int newCity;
+				newCity = this.selectNextArc(previousArc);
+				if (newBreed.contains(newCity)) {
+					newCity = getRandomCity(parent1);
+				}
 				newBreed.add(newCity);
 				previousArc = newCity;
 				lastElement = newBreed.size() == parent1.size();
 			}
-
+			
 			return newBreed;
 		} catch (Exception e) {
 			throw e;
@@ -63,13 +69,14 @@ public class ArcCross extends Recombination {
 			adj.add(parent.get(1));
 		} else {
 			if (index == parent.size() - 1) {
-				adj.add(parent.get(parent.size() - 2));
+				adj.add(parent.get(index - 1));
 				adj.add(parent.get(0));
 			} else {
 				adj.add(parent.get(index + 1));
 				adj.add(parent.get(index - 1));
 			}
 		}
+
 		return adj;
 	}
 
@@ -97,8 +104,6 @@ public class ArcCross extends Recombination {
 					}
 				}
 				return adj.get(indexMinLength);
-			} else {
-				System.out.println("SAF");
 			}
 			return -1;
 		} catch (Exception e) {
@@ -118,6 +123,14 @@ public class ArcCross extends Recombination {
 			}
 
 			return counter;
+		}
+		return 0;
+	}
+
+	private int getRandomCity(ArrayList<Integer> parent1) {
+		for (Integer p : parent1) {
+			if (newBreed.indexOf(p) == -1)
+				return p;
 		}
 		return 0;
 	}

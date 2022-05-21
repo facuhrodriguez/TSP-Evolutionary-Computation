@@ -1,13 +1,20 @@
 package Helpers;
 
+import java.io.File;
 import java.io.FileWriter;   
 import java.io.IOException;
 
 public class Logger {
 	private FileWriter output;
-	public Logger() {
+	public Logger(int iteration) {
 		try {
-			output = new FileWriter("results.txt");
+			File folder = new File("/Resultados");
+			if (!folder.exists()) {
+				folder.mkdir();
+			}
+			
+			String path = System.getProperty("user.dir") + "/Resultados/Corrida " + iteration + ".txt";
+			output = new FileWriter(path);
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
 			e.printStackTrace();

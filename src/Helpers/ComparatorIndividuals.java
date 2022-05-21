@@ -14,8 +14,8 @@ public class ComparatorIndividuals implements Comparator<ArrayList<Integer>> {
 	public int compare(ArrayList<Integer> ind1, ArrayList<Integer> ind2) {
 		double fitnessInd1 = this.tspInstance.fitnessFunction(ind1);
 		double fitnessInd2 = this.tspInstance.fitnessFunction(ind2);
-		if (fitnessInd1 > fitnessInd2) return -1;
-		if (fitnessInd1 < fitnessInd2) return 1;
+		if (fitnessInd1 > fitnessInd2) return 1;
+		if (fitnessInd1 < fitnessInd2) return -1;
 		return 0;
 	}
 

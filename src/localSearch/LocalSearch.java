@@ -7,11 +7,11 @@ import Helpers.TSPInstance;
 public class LocalSearch {
 
 	TSPInstance tspInstance;
-	private final static int DEPTH_CONDITION = 20;
+	private final static int DEPTH_CONDITION = 100;
 	private final static int LIMIT_NEIGHBORS = 50;
 	private int currentInitialIndex = 0;
 	private int currentFinalIndex = 1;
-	private final static double LIMIT_NEIGHBORHOOD_PERCENT = 0.6;
+	private final static double LIMIT_NEIGHBORHOOD_PERCENT = 0.9;
 
 	public LocalSearch(TSPInstance t) {
 		this.tspInstance = t;

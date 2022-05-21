@@ -8,9 +8,8 @@ import Helpers.TSPInstance;
 public class RouletteWheelSelection extends ParentsSelection {
 	private ComparatorIndividuals comparator;
 	private TSPInstance tsp;
-
 	public RouletteWheelSelection(ArrayList<ArrayList<Integer>> t, ComparatorIndividuals comp, TSPInstance tsp) {
-		super(t);
+		super("Rueda de la ruleta");
 		this.comparator = comp;
 		this.tsp = tsp;
 	}
