@@ -9,7 +9,7 @@ import Helpers.TSPInstance;
 public class TournamentSelection extends ParentsSelection {
 	private TSPInstance tsp;
 	public TournamentSelection(ArrayList<ArrayList<Integer>> t, TSPInstance tsp) {
-		super(t);
+		super("Selección por torneo");
 		this.tsp = tsp;
 	}
 

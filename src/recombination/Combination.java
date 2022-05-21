@@ -4,8 +4,15 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Combination extends Recombination {
+
 	ArrayList<Integer> newBreed = new ArrayList<Integer>();
 
+	
+	Combination() {
+		super("Combinación");
+		// TODO Auto-generated constructor stub
+	}
+	
 	@Override
 	public ArrayList<Integer> recombinate(ArrayList<Integer> parent1, ArrayList<Integer> parent2) {
 		int pointCross = getPointCross(parent1);

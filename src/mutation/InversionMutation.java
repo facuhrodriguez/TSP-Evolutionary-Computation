@@ -3,7 +3,12 @@ package mutation;
 import java.util.ArrayList;
 
 public class InversionMutation extends GeneticMutation {
-
+	
+	public InversionMutation() {
+		super("Mutación por Inversión");
+		// TODO Auto-generated constructor stub
+	}
+	public static String name = "Mutación por inversión";
 	@Override
 	public ArrayList<Integer> mutate(ArrayList<Integer> gene) {
 		try {
