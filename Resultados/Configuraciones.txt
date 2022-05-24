@@ -1,5 +1,0 @@
-Configuración 1: 
-Recombinación: Combinación
-Mutación: Inversión
-Selección de padres: Por torneo 
-Mecanismo de sobrevivientes: Elitismo
