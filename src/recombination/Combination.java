@@ -5,20 +5,28 @@ import java.util.Random;
 
 public class Combination extends Recombination {
 
-	ArrayList<Integer> newBreed = new ArrayList<Integer>();
-
-	
-	Combination() {
+	ArrayList<Integer> newBreed1 = new ArrayList<Integer>();
+	ArrayList<Integer> newBreed2 = new ArrayList<Integer>();
+	int pointCross;
+	public Combination() {
 		super("Combinación");
-		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
-	public ArrayList<Integer> recombinate(ArrayList<Integer> parent1, ArrayList<Integer> parent2) {
-		int pointCross = getPointCross(parent1);
-		copyFirstPositions(pointCross, parent1, parent2);
-		copyLastPositions(pointCross, parent1, parent2);
-		return newBreed;
+	public ArrayList<Integer> getFirstBreed(ArrayList<Integer> parent1, ArrayList<Integer> parent2) {
+		newBreed1 = new ArrayList<Integer>();
+		pointCross = getPointCross(parent1);
+		copyFirstPositions(newBreed1, pointCross, parent1, parent2);
+		copyLastPositions(newBreed1, pointCross, parent1, parent2);
+		return newBreed1;
+	}
+
+	@Override
+	public ArrayList<Integer> getSecondBreed(ArrayList<Integer> parent1, ArrayList<Integer> parent2) {
+		newBreed2 = new ArrayList<Integer>();
+		copyFirstPositions(newBreed2, pointCross, parent2, parent1);
+		copyLastPositions(newBreed2, pointCross, parent2, parent1);
+		return newBreed2;
 	}
 
 	/**
@@ -42,7 +50,7 @@ public class Combination extends Recombination {
 	 * @param parent1
 	 * @param parent2
 	 */
-	private void copyFirstPositions(int indexCopy, ArrayList<Integer> parent1, ArrayList<Integer> parent2) {
+	private void copyFirstPositions(ArrayList<Integer> newBreed, int indexCopy, ArrayList<Integer> parent1, ArrayList<Integer> parent2) {
 		try {
 			for (int i = 0; i < indexCopy; i++) {
 				newBreed.add(parent1.get(i));
@@ -59,7 +67,7 @@ public class Combination extends Recombination {
 	 * @param parent1
 	 * @param parent2
 	 */
-	private void copyLastPositions(int indexCopy, ArrayList<Integer> parent1, ArrayList<Integer> parent2) {
+	private void copyLastPositions(ArrayList<Integer> newBreed, int indexCopy, ArrayList<Integer> parent1, ArrayList<Integer> parent2) {
 		try {
 			for (int i = indexCopy; i < parent1.size(); i++) {
 				int minIndex = parent1.size() - 1;

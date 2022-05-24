@@ -10,6 +10,7 @@ public class RouletteWheelSelection extends ParentsSelection {
 	private TSPInstance tsp;
 	public RouletteWheelSelection(ArrayList<ArrayList<Integer>> t, ComparatorIndividuals comp, TSPInstance tsp) {
 		super("Rueda de la ruleta");
+		this.setPopulation(t);
 		this.comparator = comp;
 		this.tsp = tsp;
 	}
@@ -43,7 +44,7 @@ public class RouletteWheelSelection extends ParentsSelection {
 		ArrayList<Double> positions = new ArrayList<Double>();
 		double count = 0.0;
 		for (ArrayList<Integer> gene : initialPopulation) {
-			double fitnessGene = this.tsp.fitnessFunction(gene);
+			double fitnessGene = this.tsp.fitnessFunction(gene);	
 			double positionValue = fitnessGene / this.totalFitness;
 			count += positionValue;
 			positions.add(count);

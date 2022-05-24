@@ -14,29 +14,29 @@ import recombination.Recombination;
 import survivorSelection.SurvivorSelection;
 
 public class TSPSolution {
-	
+
 	private TSPInstance tspInstance;
 	private LocalSearch localSearchAlgorithm;
 	private ParentsSelection parentSelection;
 	private Recombination recombination;
 	private GeneticMutation mutation;
 	private SurvivorSelection survivorSelection;
-	
+
 	private ArrayList<ArrayList<Integer>> population = new ArrayList<ArrayList<Integer>>();
 	private ArrayList<ArrayList<Integer>> matingPool = new ArrayList<ArrayList<Integer>>();
-	
+	private ArrayList<ArrayList<Integer>> offspring = new ArrayList<ArrayList<Integer>>();
 	// Parámetros
-	private int totalPopulation = 100;
+	private int totalPopulation;
 	private final double LOCAL_SEARCH_PERC = 0.4;
 	private ComparatorIndividuals comparator;
-	private final int MAX_ITERATIONS = 6000;
-	private final double MUTATION_PROB = 0.1;
-	private final double RECOMBINATION_PROB = 0.9;
-	
+	private static int MAX_ITERATIONS = 2000;
+	private static double MUTATION_PROB = 0.1;
+	private static double RECOMBINATION_PROB = 0.9;
+
 	private Logger logger;
 
-
-	public TSPSolution(TSPInstance tsp, LocalSearch l, Logger logger, Recombination r, GeneticMutation m, ParentsSelection p, SurvivorSelection s, int totalPop) {
+	public TSPSolution(TSPInstance tsp, LocalSearch l, Logger logger, Recombination r, GeneticMutation m,
+			ParentsSelection p, SurvivorSelection s, int totalPop) {
 		this.logger = logger;
 		this.tspInstance = tsp;
 		this.comparator = new ComparatorIndividuals(tspInstance);
@@ -46,9 +46,21 @@ public class TSPSolution {
 		this.mutation = m;
 		this.survivorSelection = s;
 		this.totalPopulation = totalPop;
-	
+
 	}
-	
+
+	public void setIterations(int iterations) {
+		TSPSolution.MAX_ITERATIONS = iterations;
+	}
+
+	public void setRecombinationProb(double recombProb) {
+		TSPSolution.RECOMBINATION_PROB = recombProb;
+	}
+
+	public void setMutationProb(double mutationProb) {
+		TSPSolution.MUTATION_PROB = mutationProb;
+	}
+
 	public void setInitialPopulation(ArrayList<ArrayList<Integer>> pop) {
 		this.population = pop;
 	}
@@ -62,54 +74,58 @@ public class TSPSolution {
 			System.out.println("Corriendo algoritmo.............");
 			logger.writeRow("\nResultados: ");
 			logger.writeRow("\t Fitnes promedio inicial (sin mejora): " + this.avgFitness());
-			
+
 			// Improve population with local search
-			this.improvePopulation();
-			
-			logger.writeRow("\t Fitness promedio inicial (con mejora de búsqueda local): " + this.avgFitness());
-			logger.writeRow("\t Mejor fitness población inicial (con mejora de búsqueda local): " + tspInstance.fitnessFunction(getBestSolution()));
-			
-			
-			while (count <= this.MAX_ITERATIONS) {
+			if (this.localSearchAlgorithm != null) {
+				this.improvePopulation();
+				logger.writeRow("\t Fitness promedio inicial (con mejora de búsqueda local): " + this.avgFitness());
+				logger.writeRow("\t Mejor fitness población inicial (con mejora de búsqueda local): "
+						+ tspInstance.fitnessFunction(getBestSolution()));
+			}
+
+			while (count <= TSPSolution.MAX_ITERATIONS) {
 				// Select parents in the Mating Pool
 				this.generateMatingPool();
-				
+
 				// Recombine and generate new breed
 				this.generateRecombination();
 
 				// Generate offspring
-				this.generateOffspring();
+				this.generateNewPopulation();
 				ArrayList<Integer> bestSolution = this.getBestSolution();
 				logger.writeRow("\t Mejor solución de la iteracion " + count + ": " + bestSolution);
-				logger.writeRow(
-						"\t Mejor fitness para la iteración " + count + ": " + tspInstance.fitnessFunction(bestSolution));
+				logger.writeRow("\t Mejor fitness para la iteración " + count + ": "
+						+ tspInstance.fitnessFunction(bestSolution));
 				logger.writeRow("\t Fitness promedio para la iteración " + count + ": " + this.avgFitness());
 
 				count++;
 			}
-			
-			
-			long end1 = System.currentTimeMillis();        
+
+			long end1 = System.currentTimeMillis();
 			ArrayList<Integer> bestSolution = this.getBestSolution();
 			logger.writeRow("\nResultados finales: ");
 			logger.writeRow("\t Fitness promedio final: " + this.avgFitness());
 			logger.writeRow("\t Mejor solución final: " + bestSolution);
 			logger.writeRow("\t Fitness Mejor solución final: " + tspInstance.fitnessFunction(bestSolution));
-			logger.writeRow("\t Costo del camino de la mejor solución final: " + 1 / tspInstance.fitnessFunction(bestSolution));
-			logger.writeRow("\t Tiempo total de ejecución del algoritmo: "+ (end1-start1) + " ms.");    
+			logger.writeRow(
+					"\t Costo del camino de la mejor solución final: " + 1 / tspInstance.fitnessFunction(bestSolution));
+			logger.writeRow("\t Tiempo total de ejecución del algoritmo: " + (end1 - start1) + " ms.");
 		} catch (Exception e) {
 			throw e;
 		}
 	}
 
 	private void writeHeader() {
-		logger.writeRow(" -------------------- Algoritmo memético ------------------");
-		logger.writeRow("Búsqueda local aplicada al " + (this.LOCAL_SEARCH_PERC * 100) +  " de la población inicial");
+		if (this.localSearchAlgorithm != null) {
+			logger.writeRow(" -------------------- Algoritmo memético ------------------");
+			logger.writeRow("Búsqueda local aplicada al " + (this.LOCAL_SEARCH_PERC * 100) + " de la población inicial");
+		}
+		
 		logger.writeRow("Parametros: ");
 		logger.writeRow("\t Poblacion total: " + this.totalPopulation);
-		logger.writeRow("\t Condición de corte: " + this.MAX_ITERATIONS + " iteraciones.");
-		logger.writeRow("\t Probabilidad de cruce: " + this.RECOMBINATION_PROB);
-		logger.writeRow("\t Probabilidad de mutación: " + this.MUTATION_PROB);
+		logger.writeRow("\t Condición de corte: " + TSPSolution.MAX_ITERATIONS + " iteraciones.");
+		logger.writeRow("\t Probabilidad de cruce: " + TSPSolution.RECOMBINATION_PROB);
+		logger.writeRow("\t Probabilidad de mutación: " + TSPSolution.MUTATION_PROB);
 		logger.writeRow("\t Mecanismo de selección de padres: " + this.parentSelection.getName());
 		logger.writeRow("\t Mecanismo de generación de hijos: " + this.recombination.getName());
 		logger.writeRow("\t Mecanismo de mutación: " + this.mutation.getName());
@@ -134,7 +150,7 @@ public class TSPSolution {
 
 	private void generateMatingPool() {
 		try {
-			for (int i=0; i < this.totalPopulation; i++) {
+			for (int i = 0; i < this.totalPopulation; i++) {
 				parentSelection.setPopulation(population);
 				parentSelection.setTotalFitness(tspInstance.getTotalFitness(this.population));
 				int parentIndex = parentSelection.generateParent();
@@ -174,25 +190,29 @@ public class TSPSolution {
 			while (count < (this.totalPopulation / 2)) {
 				int randomPos1 = getRandomGene();
 				int randomPos2 = getRandomGene();
+				while (randomPos1 == randomPos2) {
+					randomPos2 = getRandomGene();
+				}
 				ArrayList<Integer> firstParent = matingPool.get(randomPos1);
 				ArrayList<Integer> secondParent = matingPool.get(randomPos2);
 				double randomValue = Math.random();
 				if (randomValue >= (1 - RECOMBINATION_PROB)) {
 					// Generate new offspring
-					ArrayList<Integer> newBreed = recombination.recombinate(firstParent, secondParent);
+					ArrayList<Integer> newBreed1 = recombination.getFirstBreed(firstParent, secondParent);
+					ArrayList<Integer> newBreed2 = recombination.getSecondBreed(firstParent, secondParent);
 					// Mutate gene
-					ArrayList<Integer> mutatedGene = this.mutateGene(newBreed);
-					this.population.add(mutatedGene);
+					ArrayList<Integer> mutatedGene1 = this.mutateGene(newBreed1);
+					ArrayList<Integer> mutatedGene2 = this.mutateGene(newBreed2);
+					this.offspring.add(mutatedGene1);
+					this.offspring.add(mutatedGene2);
 				}
 				count++;
 			}
-			
 
 		} catch (Exception e) {
 			throw e;
 		}
 	}
-
 
 	/**
 	 * Calculate the average fitness for the current population
@@ -211,9 +231,11 @@ public class TSPSolution {
 	 * Generate new offspring
 	 */
 	@SuppressWarnings("unchecked")
-	private void generateOffspring() {
-		ArrayList<ArrayList<Integer>> newOffspring = survivorSelection.generateSurvivors(population);
+	private void generateNewPopulation() {
+		ArrayList<ArrayList<Integer>> newOffspring = survivorSelection.generateSurvivors(population, offspring);
 		this.population = (ArrayList<ArrayList<Integer>>) newOffspring.clone();
+		this.matingPool = new ArrayList<ArrayList<Integer>>();
+		this.offspring = new ArrayList<ArrayList<Integer>>();
 	}
 
 	/**
@@ -233,8 +255,6 @@ public class TSPSolution {
 		}
 	}
 
-	
-
 	/**
 	 * Print all initial population
 	 */
@@ -249,8 +269,6 @@ public class TSPSolution {
 		}
 
 	}
-
-	
 
 	/**
 	 * Get initial population
