@@ -184,7 +184,7 @@ public class ApplicationUI {
 		executeBtn.setEnabled(false);
 		executeBtn.setForeground(Color.WHITE);
 		executeBtn.setBackground(new Color(0, 102, 255));
-		executeBtn.setBounds(613, 517, 89, 23);
+		executeBtn.setBounds(613, 517, 89, 35);
 		frmAlgoritmoEvolutivo.getContentPane().add(executeBtn);
 
 		JButton btnCerrar = new JButton("Cerrar");
@@ -195,7 +195,7 @@ public class ApplicationUI {
 		});
 		btnCerrar.setForeground(Color.BLACK);
 		btnCerrar.setBackground(Color.RED);
-		btnCerrar.setBounds(712, 517, 89, 23);
+		btnCerrar.setBounds(712, 517, 89, 35);
 		frmAlgoritmoEvolutivo.getContentPane().add(btnCerrar);
 
 		JTextPane txtpnSeleccinDePadres = new JTextPane();
@@ -209,11 +209,11 @@ public class ApplicationUI {
 
 		JRadioButton rouletteWheel = new JRadioButton("Rueda de la Ruleta");
 		rouletteWheel.setBackground(SystemColor.activeCaption);
-		rouletteWheel.setSelected(true);
 		rouletteWheel.setBounds(10, 314, 155, 23);
 		frmAlgoritmoEvolutivo.getContentPane().add(rouletteWheel);
 
 		JRadioButton tournamentSelection = new JRadioButton("Selecci\u00F3n por Torneo");
+		tournamentSelection.setSelected(true);
 		tournamentSelection.setBackground(SystemColor.activeCaption);
 		tournamentSelection.setBounds(167, 314, 199, 23);
 		frmAlgoritmoEvolutivo.getContentPane().add(tournamentSelection);
@@ -339,11 +339,11 @@ public class ApplicationUI {
 		iterations.setBounds(725, 128, 46, 20);
 		frmAlgoritmoEvolutivo.getContentPane().add(iterations);
 
-		JButton btnVerResultadosFinales = new JButton("Ver resultados Finales");
+		JButton btnVerResultadosFinales = new JButton("Resultados Finales");
 		btnVerResultadosFinales.setEnabled(false);
 		btnVerResultadosFinales.setForeground(Color.WHITE);
 		btnVerResultadosFinales.setBackground(new Color(0, 102, 255));
-		btnVerResultadosFinales.setBounds(455, 517, 143, 23);
+		btnVerResultadosFinales.setBounds(434, 517, 164, 35);
 		frmAlgoritmoEvolutivo.getContentPane().add(btnVerResultadosFinales);
 
 		steadystate.addActionListener(new ActionListener() {
@@ -374,31 +374,31 @@ public class ApplicationUI {
 				SurvivorSelection s;
 				GeneticMutation m;
 				Recombination r;
-				if (applyLocalSearch.isEnabled()) {
+				if (applyLocalSearch.isSelected()) {
 					l = new LocalSearch(tspData);
 				}
-				if (tournamentSelection.isEnabled()) {
+				if (tournamentSelection.isSelected()) {
 					p = new TournamentSelection(population, tspData);
 				} else {
 					p = new RouletteWheelSelection(population, c, tspData);
 				}
 
-				if (inversionMutation.isEnabled()) {
+				if (inversionMutation.isSelected()) {
 					m = new InversionMutation();
 				} else {
 					m = new ExchangeMutation();
 				}
 
-				if (pmxCross.isEnabled()) {
+				if (pmxCross.isSelected()) {
 					r = new PMXCross(tspData.getDimension());
 				} else {
-					if (arcCross.isEnabled()) {
+					if (arcCross.isSelected()) {
 						r = new ArcCross();
 					} else
 						r = new Combination();
 				}
 
-				if (elitism.isEnabled()) {
+				if (elitism.isSelected()) {
 					s = new Elitism(population, c, totalPopValue, p, tspData);
 				} else {
 					s = new SteadyState(c, totalPopValue);
@@ -433,7 +433,7 @@ public class ApplicationUI {
 		btnVerResultadosFinales.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Runtime.getRuntime().exec("explorer.exe  /select," + logger.getFile().getAbsolutePath());     
+					Runtime.getRuntime().exec("explorer.exe  /select," + logger.getFile().getAbsolutePath());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

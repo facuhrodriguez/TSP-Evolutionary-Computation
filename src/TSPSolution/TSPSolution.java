@@ -73,8 +73,9 @@ public class TSPSolution {
 
 			System.out.println("Corriendo algoritmo.............");
 			logger.writeRow("\nResultados: ");
-			logger.writeRow("\t Fitnes promedio inicial (sin mejora): " + this.avgFitness());
-
+			logger.writeRow("\t Fitness promedio inicial: " + this.avgFitness());
+			logger.writeRow("\t Mejor fitness población inicial: "
+					+ tspInstance.fitnessFunction(getBestSolution()));
 			// Improve population with local search
 			if (this.localSearchAlgorithm != null) {
 				this.improvePopulation();
@@ -119,6 +120,8 @@ public class TSPSolution {
 		if (this.localSearchAlgorithm != null) {
 			logger.writeRow(" -------------------- Algoritmo memético ------------------");
 			logger.writeRow("Búsqueda local aplicada al " + (this.LOCAL_SEARCH_PERC * 100) + " de la población inicial");
+		} else {
+			logger.writeRow(" -------------------- Algoritmo evolutivo ------------------");
 		}
 		
 		logger.writeRow("Parametros: ");
@@ -232,6 +235,8 @@ public class TSPSolution {
 	 */
 	@SuppressWarnings("unchecked")
 	private void generateNewPopulation() {
+		survivorSelection.setTotalPopulation(totalPopulation);
+		
 		ArrayList<ArrayList<Integer>> newOffspring = survivorSelection.generateSurvivors(population, offspring);
 		this.population = (ArrayList<ArrayList<Integer>>) newOffspring.clone();
 		this.matingPool = new ArrayList<ArrayList<Integer>>();

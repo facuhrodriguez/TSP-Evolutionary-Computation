@@ -10,7 +10,6 @@ public class RouletteWheelSelection extends ParentsSelection {
 	private TSPInstance tsp;
 	public RouletteWheelSelection(ArrayList<ArrayList<Integer>> t, ComparatorIndividuals comp, TSPInstance tsp) {
 		super("Rueda de la ruleta");
-		this.setPopulation(t);
 		this.comparator = comp;
 		this.tsp = tsp;
 	}
@@ -49,6 +48,7 @@ public class RouletteWheelSelection extends ParentsSelection {
 			count += positionValue;
 			positions.add(count);
 		}
+		
 		return positions;
 	}
 

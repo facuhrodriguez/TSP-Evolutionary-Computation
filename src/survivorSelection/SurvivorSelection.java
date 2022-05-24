@@ -26,7 +26,7 @@ public abstract class SurvivorSelection {
 		return this.totalPopulation;
 	}
 	
-	protected void setTotalPopulation(int p) {
+	public void setTotalPopulation(int p) {
 		this.totalPopulation = p;
 	}
 

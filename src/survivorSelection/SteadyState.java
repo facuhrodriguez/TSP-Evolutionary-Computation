@@ -7,6 +7,7 @@ import Helpers.ComparatorIndividuals;
 
 public class SteadyState extends SurvivorSelection {
 	private int umbralValue;
+
 	public SteadyState(ComparatorIndividuals c, int pop) {
 		super("Steady State");
 		this.comparator = c;
@@ -30,34 +31,39 @@ public class SteadyState extends SurvivorSelection {
 		} catch (Exception e) {
 			throw e;
 		}
-		
+
 	}
-	
+
 	private ArrayList<ArrayList<Integer>> addNWorstValues(ArrayList<ArrayList<Integer>> currentPop) {
 		try {
 			ArrayList<ArrayList<Integer>> newPop = new ArrayList<ArrayList<Integer>>();
-			for (int i=this.umbralValue; i < this.getTotalPopulation(); i++) {
-				newPop.add(currentPop.get(i));
+			for (int i = this.umbralValue; i < this.getTotalPopulation(); i++) {
+				if (i < currentPop.size())
+					newPop.add(currentPop.get(i));
 			}
 			return newPop;
 		} catch (Exception e) {
 			throw e;
 		}
-		
+
 	}
-	
+
 	private ArrayList<ArrayList<Integer>> addNBestValues(ArrayList<ArrayList<Integer>> offspring) {
 		try {
 			ArrayList<ArrayList<Integer>> newPop = new ArrayList<ArrayList<Integer>>();
-			for (int i=0; i < this.umbralValue; i++) {
-				int indexToAdd = offspring.size() - 1 - i;
-				newPop.add(offspring.get(indexToAdd));
+			if (offspring.size() > 0) {
+				for (int i = 0; i < this.umbralValue; i++) {
+					int indexToAdd = offspring.size() - 1 - i;
+					if (indexToAdd > 0)
+						newPop.add(offspring.get(indexToAdd));
+				}
 			}
+			
 			return newPop;
 		} catch (Exception e) {
 			throw e;
 		}
-		
+
 	}
 
 }
