@@ -9,9 +9,9 @@ import java.util.Scanner;
 public class TSPLIBHelper {
 
 	private HashMap<Integer, HashMap<Integer, Integer>> paths;
-	private HashMap<Integer, Integer> cities = new HashMap<Integer, Integer>();
-	private final Integer DIAG_VALUE = 9999;
+	private ArrayList<Integer> cities = new ArrayList<Integer>();
 	private TSPInstance instanceData;
+	private static int rowNumber = 0;
 
 	public TSPLIBHelper() {
 		this.paths = new HashMap<Integer, HashMap<Integer, Integer>>();
@@ -32,7 +32,6 @@ public class TSPLIBHelper {
 				String[] row = data.split(":");
 				this.processRow(row);
 			}
-			ArrayList<Integer> cities = new ArrayList<Integer>(this.cities.values());
 			this.instanceData.setCities(cities);
 			this.instanceData.setPaths(paths);
 			reader.close();
@@ -61,6 +60,7 @@ public class TSPLIBHelper {
 			case "DIMENSION": {
 				dimension = Integer.parseInt(row[1].trim());
 				this.instanceData.setDimension(dimension);
+				this.createCities(dimension);
 				break;
 			}
 			default:
@@ -70,30 +70,21 @@ public class TSPLIBHelper {
 			String auxRow = row[0].replaceAll("\\s", "-");
 			if (!auxRow.equals("EDGE_WEIGHT_SECTION") && !auxRow.equals("EOF")) {
 				String splitRow[] = auxRow.split("-");
-				if (this.cities.size() == 0)
-					this.createCities(splitRow);
-				else
-					this.createPaths(splitRow);
-
+				this.createPaths(splitRow);
+				TSPLIBHelper.rowNumber++;
 			}
+			
 		}
 	}
 
 	/**
-	 * Create cities given the first row of file
+	 * Create cities given the dimension of file
 	 * 
-	 * @param {String[]} citiesRow
+	 * @param {int} dimension
 	 */
-	private void createCities(String[] citiesRow) {
-		Integer indexCityToAdd = 1;
-		for (int i = 0; i < citiesRow.length; i++) {
-			String city = citiesRow[i];
-			if (!city.equals("")) {
-				Integer cityToAdd = Integer.parseInt(citiesRow[i].trim());
-				if (!cities.containsValue(cityToAdd) && !cityToAdd.equals(this.DIAG_VALUE))
-					this.cities.put(indexCityToAdd, cityToAdd);
-				indexCityToAdd++;
-			}
+	private void createCities(int dimension) {
+		for (int i = 0; i < dimension; i++) {
+			this.cities.add(i);
 		}
 
 	}
@@ -104,49 +95,28 @@ public class TSPLIBHelper {
 	 * @param {String[]} citiesRow
 	 */
 	private void createPaths(String[] pathRow) {
-		Integer cityIndex = 1;
-		Integer city = Integer.parseInt(pathRow[getFirstCity(pathRow)]);
+		int citySource = TSPLIBHelper.rowNumber;
+		int cityDest = 0;
 		for (int i = 0; i < pathRow.length; i++) {
 			String path = pathRow[i];
 			if (!path.equals("")) {
-				Integer cityToAdd = this.cities.get(cityIndex);
 				Integer costPath = Integer.parseInt(path.trim());
-				if (cityToAdd != null ) {
-					if (this.paths.containsKey(city)) {
-						HashMap<Integer, Integer> pathCity = this.paths.get(city);
-						if (!pathCity.containsKey(cityToAdd))
-							pathCity.put(cityToAdd, costPath);
-					} else {
-						if (!this.paths.containsKey(city)) {
-							HashMap<Integer, Integer> newPath = new HashMap<Integer, Integer>();
-							newPath.put(cityToAdd, costPath);
-							this.paths.put(city, newPath);
-						}
+				if (this.paths.containsKey(citySource)) {
+					HashMap<Integer, Integer> pathCity = this.paths.get(citySource);
+					pathCity.put(cityDest, costPath);
+				} else {
+					if (!this.paths.containsKey(citySource)) {
+						HashMap<Integer, Integer> newPath = new HashMap<Integer, Integer>();
+						newPath.put(cityDest, costPath);
+						this.paths.put(citySource, newPath);
 					}
 				}
-				cityIndex++;
+				cityDest++;
 			}
 		}
 	}
 
-	/**
-	 * Get the first city different to ""
-	 * 
-	 * @param {String[]} row
-	 * @return {Integer} the first city of row
-	 */
-	private Integer getFirstCity(String[] row) {
-		String value = row[0];
-		int i = 0;
-		while (value.equals("") && i < row.length) {
-			value = row[i].trim();
-			i++;
-		}
-		if (i <= row.length)
-			return i - 1;
-		return -1;
-	}
-	
+
 	public TSPInstance getTSPInstance() {
 		if (this.instanceData != null) {
 			return this.instanceData;
