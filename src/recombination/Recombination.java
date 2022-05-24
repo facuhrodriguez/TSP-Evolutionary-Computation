@@ -10,7 +10,9 @@ public abstract class Recombination {
 		this.name = name;
 	}
 	
-	public abstract ArrayList<Integer> recombinate(ArrayList<Integer> parent1, ArrayList<Integer> parent2);
+	public abstract ArrayList<Integer> getFirstBreed(ArrayList<Integer> parent1, ArrayList<Integer> parent2);
+	public abstract ArrayList<Integer> getSecondBreed(ArrayList<Integer> parent1, ArrayList<Integer> parent2);
+	
 	
 	public String getName() {
 		return this.name;

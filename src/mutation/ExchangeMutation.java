@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ExchangeMutation extends GeneticMutation {
 
-	ExchangeMutation() {
+	public ExchangeMutation() {
 		super("Mutación por intercambio");
 		// TODO Auto-generated constructor stub
 	}

@@ -6,14 +6,14 @@ import java.io.IOException;
 
 public class Logger {
 	private FileWriter output;
-	public Logger(int iteration) {
+	public Logger(String file) {
 		try {
 			File folder = new File("/Resultados");
 			if (!folder.exists()) {
 				folder.mkdir();
 			}
 			
-			String path = System.getProperty("user.dir") + "/Resultados/Corrida " + iteration + ".txt";
+			String path = System.getProperty("user.dir") + "/Resultados/ " + file + ".txt";
 			output = new FileWriter(path);
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
