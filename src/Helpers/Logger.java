@@ -6,19 +6,24 @@ import java.io.IOException;
 
 public class Logger {
 	private FileWriter output;
-	public Logger(String file) {
+	File file;
+	public Logger(String fileName) {
 		try {
-			File folder = new File("/Resultados");
+			String path = System.getProperty("user.dir") + "/Resultados/";
+			File folder = new File(path);
 			if (!folder.exists()) {
 				folder.mkdir();
 			}
-			
-			String path = System.getProperty("user.dir") + "/Resultados/ " + file + ".txt";
-			output = new FileWriter(path);
+			file = new File(path + fileName + ".txt");
+			output = new FileWriter(path + fileName + ".txt");
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
 		}
+	}
+	
+	public File getFile() {
+		return this.file;
 	}
 	
 	public void writeRow(String data) {

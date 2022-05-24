@@ -47,6 +47,8 @@ public class ApplicationUI {
 	private JTextField txtAlgoritmoEvolutivoPara;
 	private JTextField totalPopulation;
 	private JTextField crossProb;
+	JFileChooser file;
+	Logger logger;
 	private JTextField mutationProb;
 	private String path;
 	TSPLIBHelper fh;
@@ -359,7 +361,7 @@ public class ApplicationUI {
 		executeBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnVerResultadosFinales.setEnabled(false);
-				Logger logger = new Logger(fileName);
+				logger = new Logger(fileName);
 				TSPInstance tspData = fh.getTSPInstance();
 				ComparatorIndividuals c = new ComparatorIndividuals(tspData);
 				Integer totalPopValue = Integer.parseInt(totalPopulation.getText());
@@ -414,7 +416,7 @@ public class ApplicationUI {
 
 		btnSelectFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser file = new JFileChooser();
+				file = new JFileChooser();
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("ATSP FILES", "txt", "text", "atsp");
 				file.setFileFilter(filter);
 				if (file.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -431,8 +433,7 @@ public class ApplicationUI {
 		btnVerResultadosFinales.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String path = System.getProperty("user.dir") + "/Resultados/ ";
-					Runtime.getRuntime().exec("explorer.exe /select," + path);
+					Runtime.getRuntime().exec("explorer.exe  /select," + logger.getFile().getAbsolutePath());     
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
